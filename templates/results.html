@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Query Results</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+<div class="top-bar">
+
+<h2>Query Results</h2>
+
+<a href="/" class="back-btn">
+← New Search
+</a>
+
+</div>
+
+<div class="query-summary">
+
+<div class="summary-block">
+<h4>Your Query</h4>
+<p>{{ user_input }}</p>
+</div>
+
+<div class="summary-block">
+<h4>Generated MongoDB Filter</h4>
+<pre>{{ generated_query }}</pre>
+</div>
+
+</div>
+
+{% if results %}
+
+<div class="results">
+
+<div class="result-top">
+<span class="badge">
+{{ results|length }} record(s) found
+</span>
+</div>
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Branch</th>
+<th>Subject</th>
+<th>Grade</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for r in results %}
+<tr>
+
+<td>{{ r.name }}</td>
+<td>{{ r.branch }}</td>
+<td>{{ r.subject }}</td>
+<td>{{ r.grade }}</td>
+
+<td class="{{ 'fail' if r.status == 'Fail' else 'pass' }}">
+{{ r.status }}
+</td>
+
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+{% else %}
+
+<div class="empty-box">
+No matching records found.
+</div>
+
+{% endif %}
+
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Student Result Query System</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+<div class="header">
+<h1>🎓 Student Result Query System</h1>
+<p>Natural Language → MongoDB using Groq LLM</p>
+</div>
+
+<form method="POST" class="search-form">
+
+<input
+type="text"
+name="query"
+placeholder="Example: Show CSE students who failed"
+required>
+
+<button type="submit">
+Search
+</button>
+
+</form>
+
+{% if generated_query %}
+<div class="query-box">
+<h3>Generated MongoDB Filter</h3>
+<pre>{{ generated_query }}</pre>
+</div>
+{% endif %}
+
+{% if error %}
+<div class="error-box">
+<strong>Error:</strong>
+{{ error }}
+</div>
+{% endif %}
+
+{% if results %}
+
+<div class="results">
+
+<div class="result-top">
+<h3>Results</h3>
+<span class="badge">
+{{ count }} record(s)
+</span>
+</div>
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Branch</th>
+<th>Subject</th>
+<th>Grade</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for r in results %}
+<tr>
+
+<td>{{ r.name }}</td>
+<td>{{ r.branch }}</td>
+<td>{{ r.subject }}</td>
+<td>{{ r.grade }}</td>
+
+<td class="{{ 'fail' if r.status == 'Fail' else 'pass' }}">
+{{ r.status }}
+</td>
+
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+{% elif generated_query and not error %}
+
+<div class="empty-box">
+No matching records found.
+</div>
+
+{% endif %}
+
+<div class="footer">
+Built with Flask • MongoDB • Groq LLaMA 3.1
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
